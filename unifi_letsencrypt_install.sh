@@ -40,7 +40,7 @@ certbot certonly --standalone --agree-tos --keep -d $DOMAIN -m $EMAIL
 #certbot certonly --standalone --agree-tos --no-eff-email --keep -d $DOMAIN -m $EMAIL
 
 echo "Exporting $DOMAIN certificate with openssl"
-openssl pkcs12 -export -in /etc/letsencrypt/live/$DOMAIN/cert.pem -inkey /etc/letsencrypt/live/$DOMAIN/privkey.pem -out /etc/letsencrypt/live/$DOMAIN/$DOMAIN.p12 -name unifi -CAfile /etc/letsencrypt/live/$DOMAIN/chain.pem -caname root -password pass:$KEYSTORE_PASS
+openssl pkcs12 -export -in /etc/letsencrypt/live/$DOMAIN/fullchain.pem -inkey /etc/letsencrypt/live/$DOMAIN/privkey.pem -out /etc/letsencrypt/live/$DOMAIN/$DOMAIN.p12 -name unifi -CAfile /etc/letsencrypt/live/$DOMAIN/chain.pem -caname root -password pass:$KEYSTORE_PASS
 
 if [ -f /etc/letsencrypt/live/$DOMAIN/$DOMAIN.p12 ]; then
 	echo "Backing up UniFi keystore"

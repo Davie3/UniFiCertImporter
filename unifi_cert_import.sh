@@ -13,14 +13,18 @@
 CERT_LOCATION="/path/to/cert.pem" #Path to the certificate
 KEY_LOCATION="/path/to/key.pem" #Path to the certificate's private key
 CA_LOCATION="/path/to/chain.pem" #Path to the Intermediate certificate
+BUNDLE_PATH="/path/to/" #Location for bundled certificates. Must be a directory.
 
 KEYSTORE_PASS="aircontrolenterprise" #This is the default UniFi key store password.
 
 ##The following file will be generated. Specify where to store the pkcs12 export and what to name it (include the .p12 extension):
 PKCS12_LOCATION="/path/to/domain.p12"
 
+echo "Creating certificate chain bundle"
+cat $CA_LOCATION $CERT_LOCATION > $BUNDLE_PATH/fullchain.pem
+
 echo "Exporting $CERT_LOCATION with openssl"
-openssl pkcs12 -export -in $CERT_LOCATION -inkey $KEY_LOCATION -out $PKCS12_LOCATION -name unifi -CAfile $CA_LOCATION -caname root -password pass:$KEYSTORE_PASS
+openssl pkcs12 -export -in $BUNDLE_PATH/fullchain.pem -inkey $KEY_LOCATION -out $PKCS12_LOCATION -name unifi -CAfile $CA_LOCATION -caname root -password pass:$KEYSTORE_PASS
 
 if [ -f $PKCS12_LOCATION ]; then
 	echo "Backing up UniFi keystore"
